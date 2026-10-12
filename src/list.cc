@@ -21,7 +21,24 @@ template <typename T> void list<T>::push_back(const T &value) { throw "unimpleme
 
 template <typename T> void list<T>::push_front(const T &value) { throw "unimplemented"; }
 
-template <typename T> void list<T>::pop_back() { throw "unimplemented"; }
+template <typename T> void list<T>::pop_back()     {
+  Node* current = tail;
+  if (current == nullptr) {
+    return;}
+  else if (current->prev == nullptr) {
+    delete current;
+    head = tail = nullptr;
+    return;}
+  else if (current->prev == head) {
+    delete current;
+    tail = head;
+    head->next = nullptr;
+    return;}
+
+  tail = current->prev;
+  delete current;
+  tail->next = nullptr;
+}
 
 template <typename T> void list<T>::pop_front() { throw "unimplemented"; }
 
