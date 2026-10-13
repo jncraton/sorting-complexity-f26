@@ -17,9 +17,24 @@ list<T>::list(std::initializer_list<T> values)
 
 template <typename T> list<T>::~list() { throw "unimplemented"; }
 
-template <typename T> void list<T>::push_back(const T &value) { throw "unimplemented"; }
+template <typename T> void list<T>::push_back(const T &value) { 
+  Node* current = tail;
 
-template <typename T> void list<T>::push_front(const T &value) { throw "unimplemented"; }
+  if (current == nullptr){
+    head = tail = new Node(value, nullptr, nullptr);}
+  else if (current == head) {
+    head->next = tail = new Node(value, head, nullptr);}
+  else {
+    current->next = tail = new Node(value, current, nullptr);}
+}
+
+template <typename T> void list<T>::push_front(const T &value) { 
+  if (head == nullptr) {
+    head = tail = new Node(value, nullptr, nullptr);}
+  else {
+    head = new Node(value, nullptr, head);
+    head->next->prev = head;}
+ }
 
 template <typename T> void list<T>::pop_back()     {
   Node* current = tail;
@@ -40,7 +55,22 @@ template <typename T> void list<T>::pop_back()     {
   tail->next = nullptr;
 }
 
-template <typename T> void list<T>::pop_front() { throw "unimplemented"; }
+template <typename T> void list<T>::pop_front() { 
+  Node* current = head;
+
+  if (current == nullptr) {
+    return;}
+  else if (current == tail){
+    delete head;
+    delete tail;
+    head = tail = nullptr;}
+  else {
+    Node* temp;
+    temp = head;
+    head = head->next;
+    head->prev = nullptr;
+    delete temp;}
+ }
 
 template <typename T> void list<T>::insert(std::size_t index, const T &value) { throw "unimplemented"; }
 
