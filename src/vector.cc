@@ -5,7 +5,15 @@
 
 #include "trackedint.hh"
 
-template <typename T> void vector<T>::reallocate(std::size_t new_cap) { throw "unimplemented"; }
+template <typename T> void vector<T>::reallocate(std::size_t new_cap) {
+  T *new_data = new T[new_cap];
+  for (std::size_t i = 0; i < count; ++i) {
+    new_data[i] = data_ptr[i];
+  }
+  delete[] data_ptr;
+  data_ptr = new_data;
+  cap = new_cap;
+ }
 
 template <typename T>
 vector<T>::vector() : data_ptr(nullptr), count(0), cap(0) { throw "unimplemented"; }
