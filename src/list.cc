@@ -5,8 +5,8 @@
 #include "trackedint.hh"
 
 template <typename T>
-list<T>::node::node(const T &value, node *previous, node *next)
-    : value(value), previous(previous), next(next) { throw "unimplemented"; }
+list<T>::node::node(const T &value, node *prev, node *next)
+    : value(value), previous(prev), next(next) { throw "unimplemented"; }
 
 template <typename T>
 list<T>::list() : head(nullptr), tail(nullptr), count(0) { throw "unimplemented"; }
@@ -72,13 +72,75 @@ template <typename T> void list<T>::pop_front() {
     delete temp;}
  }
 
-template <typename T> void list<T>::insert(std::size_t index, const T &value) { throw "unimplemented"; }
+template <typename T> void list<T>::insert(std::size_t index, const T &value) {
+  int i = 0;
+  Node* current = head;
 
-template <typename T> void list<T>::clear() { throw "unimplemented"; }
+ if (index == 0) {
+    if (head == nullptr) {
+      head = tail = new Node(value, nullptr, nullptr);
+      return;}
+    else {
+      head = new Node(value, head, nullptr);
+      head->next->prev = head;}
+      return;}
 
-template <typename T> T &list<T>::at(std::size_t index) { throw "unimplemented"; }
+  while (i < index - 1 && current != nullptr) {
+    current = current->next;
+    i++;}
+  if (current == nullptr) {
+      throw std::out_of_range("Index out of range");}
+  if (current == tail){
+    current->next = tail = new Node(value, tail, nullptr);}
+  else{
+    current->next = new Node(value, current, current->next);
+    current->next->next->prev = current->next;
+    return;}
+}
 
-template <typename T> const T &list<T>::at(std::size_t index) const { throw "unimplemented"; }
+template <typename T> void list<T>::clear() {
+  Node* current = tail;
+
+  if (current == nullptr){
+    return;}
+
+  while (current != head){
+    current = current->prev;
+    delete current->next;}
+
+  delete head;
+  head = tail = nullptr;
+}
+
+template <typename T> T &list<T>::at(std::size_t index) { 
+  int i = 0;
+  Node* current = head;
+
+  if (current == nullptr) {
+      throw std::out_of_range("Index out of range");}
+    while (i < index){
+      if (current->next == nullptr) {
+        throw std::out_of_range("Index out of range");}
+      current = current->next;
+      i++;}
+    
+  return current->data;
+}
+
+template <typename T> const T &list<T>::at(std::size_t index) const { 
+  int i = 0;
+  const Node* current = head;
+
+  if (current == nullptr) {
+      throw std::out_of_range("Index out of range");}
+    while (i < index){
+      if (current->next == nullptr) {
+        throw std::out_of_range("Index out of range");}
+      current = current->next;
+      i++;}
+    
+  return current->data;
+}
 
 template <typename T> T &list<T>::operator[](std::size_t index) {
   return at(index);
@@ -88,15 +150,44 @@ template <typename T> const T &list<T>::operator[](std::size_t index) const {
   return at(index);
 }
 
-template <typename T> T &list<T>::front() { throw "unimplemented"; }
+template <typename T> T &list<T>::front() {
+  if (head == nullptr){
+    throw std::out_of_range("List is empty");}
+  else{
+    return head->value;}
+}
 
-template <typename T> const T &list<T>::front() const { throw "unimplemented"; }
+template <typename T> const T &list<T>::front() const { 
+  if (head == nullptr){
+    throw std::out_of_range("List is empty");}
+  else{
+    return head->value;}
+}
 
-template <typename T> T &list<T>::back() { throw "unimplemented"; }
+template <typename T> T &list<T>::back() { 
+  if (tail == nullptr){
+      throw std::out_of_range("List is empty");}
+    else{
+      return tail->value;}
+}
 
-template <typename T> const T &list<T>::back() const { throw "unimplemented"; }
+template <typename T> const T &list<T>::back() const {
+  if (tail == nullptr){
+    throw std::out_of_range("List is empty");}
+  else{
+    return tail->value;}
+}
 
-template <typename T> std::size_t list<T>::size() const { throw "unimplemented"; }
+template <typename T> std::size_t list<T>::size() const {
+  int size = 0;
+  const Node* current = head;
+
+  while (current != nullptr){
+    size += 1;
+    current = current->next;}
+  
+  return size;
+}
 
 template <typename T> void list<T>::sort_bubble() { throw "unimplemented"; }
 
