@@ -15,10 +15,31 @@ vector<T>::vector(std::initializer_list<T> values)
     : data_ptr(nullptr), count(0), cap(0) { throw "unimplemented"; }
 
 template <typename T> vector<T>::~vector() { throw "unimplemented"; }
-
-template <typename T> void vector<T>::push_back(const T &value) { throw "unimplemented"; }
-
-template <typename T> void vector<T>::push_front(const T &value) { throw "unimplemented"; }
+//im doing this one
+template <typename T> void vector<T>::push_back(const T &value) {
+   if (count >= cap){
+     reallocate(cap*2);
+   }
+   
+  data_ptr[count] = value;
+  count++;
+   }
+//im also doing this one.
+template <typename T> void vector<T>::push_front(const T &value) { 
+  if (count >= cap){
+    reallocate(cap*2);
+  } 
+  if (count = 0){
+    data_ptr[0] = value;
+  }
+  std::size_t i = count;
+  while( i > 0){
+    data_ptr[i] = data_ptr[i - 1];
+    i--;  
+  }
+  data_ptr[0] = value;
+  count++;
+}
 
 template <typename T> void vector<T>::pop_back() { throw "unimplemented"; }
 
