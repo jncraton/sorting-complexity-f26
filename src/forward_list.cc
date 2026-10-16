@@ -30,21 +30,11 @@ if (head == nullptr) {
   current->next = new node(value);}
 
 template <typename T> void forward_list<T>::push_front(const T &value)
-{
-node* newNode = new node(value);
-
-
-    if (head == nullptr) {
-      head = newNode;
-      return;
-
-
-    }
-    newNode->next = head;
-    head->prev = newNode;
-    head = newNode;
-  }
-
+{   
+      node *new_node = new node(value); 
+      new_node->next = head;
+      head = new_node;
+}
 template <typename T> void forward_list<T>::pop_back()
 {
 if (head == nullptr) {
@@ -65,12 +55,19 @@ if (head == nullptr) {
     current->next = nullptr;
 }
 
-template <typename T> void forward_list<T>::pop_front() { throw "unimplemented"; }
+template <typename T> void forward_list<T>::pop_front()
+{
+if (head == nullptr) 
+  throw std::out_of_range("List is empty");
+node* old_head = head;
+head = head->next;
+delete old_head;
+}
 
 template <typename T> void forward_list<T>::insert(std::size_t index, const T &value) 
 {
 if (index == 0) {
-      head = new node(&value, head);
+      head = new node(value, head);
       return;
     }
     node* current = head;
@@ -78,7 +75,7 @@ if (index == 0) {
       current = current->next;
     }
       if (current != nullptr) {
-      current->next = new node(&value, current->next);
+      current->next = new node(value, current->next);
     }
 }
 
