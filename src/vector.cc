@@ -16,11 +16,17 @@ template <typename T> void vector<T>::reallocate(std::size_t new_cap) {
  }
 
 template <typename T>
-vector<T>::vector() : data_ptr(nullptr), count(0), cap(0) { throw "unimplemented"; }
+vector<T>::vector() 
+: data_ptr(nullptr), count(0), cap(0) {
+}
 
 template <typename T>
 vector<T>::vector(std::initializer_list<T> values)
-    : data_ptr(nullptr), count(0), cap(0) { throw "unimplemented"; }
+    : data_ptr(nullptr), count(0), cap(0) { 
+  for (const T& value : values) {
+      push_back(value);
+  }
+    }
 
 template <typename T> vector<T>::~vector() { throw "unimplemented"; }
 //im doing this one
