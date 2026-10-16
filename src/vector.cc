@@ -28,7 +28,9 @@ vector<T>::vector(std::initializer_list<T> values)
   }
     }
 
-template <typename T> vector<T>::~vector() { throw "unimplemented"; }
+template <typename T> vector<T>::~vector() {
+  delete[] data_ptr;
+}
 //im doing this one
 template <typename T> void vector<T>::push_back(const T &value) {
    if (count >= cap){
@@ -64,9 +66,19 @@ void vector<T>::insert(std::size_t index, const T &value) { throw "unimplemented
 
 template <typename T> void vector<T>::clear() { throw "unimplemented"; }
 
-template <typename T> T &vector<T>::at(std::size_t index) { throw "unimplemented"; }
+template <typename T> T &vector<T>::at(std::size_t index) {
+  if (index >= count) {
+    throw std::out_of_range("vector::at index out of range");
+  }
+  return data_ptr[index];
+}
 
-template <typename T> const T &vector<T>::at(std::size_t index) const { throw "unimplemented"; }
+template <typename T> const T &vector<T>::at(std::size_t index) const {
+  if (index >= count) {
+    throw std::out_of_range("vector::at index out of range");
+  }
+  return data_ptr[index];
+}
 
 template <typename T> T &vector<T>::operator[](std::size_t index) {
   return data_ptr[index];
