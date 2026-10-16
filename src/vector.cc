@@ -67,7 +67,7 @@ template <typename T> void vector<T>::pop_back() {
 //this one as well
 template <typename T> void vector<T>::pop_front() {
     if (count == 0){
-      std::out_of_range("This lsit does not exist")
+      std::out_of_range("This lsit does not exist");
     }
     if (count == 1){
       count--;
@@ -91,7 +91,7 @@ void vector<T>::insert(std::size_t index, const T &value) {
       data_ptr[index] = value; 
     }
     else {
-      throw std::out_of_range("Index out of bounds")
+      throw std::out_of_range("Index out of bounds");
     }
     count++;
 
