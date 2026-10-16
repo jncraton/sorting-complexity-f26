@@ -56,29 +56,66 @@ template <typename T> void vector<T>::push_front(const T &value) {
   data_ptr[0] = value;
   count++;
 }
+//im going to try adn do this one just because
+template <typename T> void vector<T>::pop_back() {
+    if (count == 0)
+    {
+      std::out_of_range("This list does not exist");
+    }
+    count--;
+    
 
-template <typename T> void vector<T>::pop_back() { throw "unimplemented"; }
+  }
+//this one as well
+template <typename T> void vector<T>::pop_front() {
+    if (count == 0){
+      std::out_of_range("This lsit does not exist");
+    }
+    if (count == 1){
+      count--;
+    }
+    std::size_t index = 0;
+    for(std::size_t i = index; i + 1 < count; i++ ){
+      data_ptr[i] = data_ptr[i+1];
+    }
 
-template <typename T> void vector<T>::pop_front() { throw "unimplemented"; }
-
+ }
+//and this one
 template <typename T>
-void vector<T>::insert(std::size_t index, const T &value) { throw "unimplemented"; }
+void vector<T>::insert(std::size_t index, const T &value) {
+    if (size >= cap) {
+      resize(cap*2);
+    }
+    if (index < count && index >= 0){
+      for(std::size_t i = count; i > index; i--){
+        data_ptr[i] = data_ptr[i-1];
+      }
+      data_ptr[index] = value; 
+    }
+    else {
+      throw std::out_of_range("Index out of bounds");
+    }
+    count++;
 
-template <typename T> void vector<T>::clear() { throw "unimplemented"; }
+ }
+
+template <typename T> void vector<T>::clear() { 
+    count = 0;
+ }
 
 template <typename T> T &vector<T>::at(std::size_t index) {
-  if (index >= count) {
-    throw std::out_of_range("vector::at index out of range");
+  if(index < 0 || static_cast<std::size_t>(index) >= count){
+    throw std::out_of_range{"The item you have selected is out of range"};
   }
   return data_ptr[index];
-}
+ }
 
 template <typename T> const T &vector<T>::at(std::size_t index) const {
-  if (index >= count) {
-    throw std::out_of_range("vector::at index out of range");
+   if(index < 0 || static_cast<std::size_t>(index) >= count){
+    throw std::out_of_range{"The item you have selected is out of range"};
   }
   return data_ptr[index];
-}
+ }
 
 template <typename T> T &vector<T>::operator[](std::size_t index) {
   return data_ptr[index];
