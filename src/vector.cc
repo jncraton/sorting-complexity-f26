@@ -76,13 +76,33 @@ template <typename T> const T &vector<T>::operator[](std::size_t index) const {
   return data_ptr[index];
 }
 
-template <typename T> T &vector<T>::front() { throw "unimplemented"; }
+template <typename T> T &vector<T>::front() {
+  if (count == 0) {
+    throw std::out_of_range("vector::back on empty vector");
+  }
+  return data_ptr[count - 1];
+}
 
-template <typename T> const T &vector<T>::front() const { throw "unimplemented"; }
+template <typename T> const T &vector<T>::front() const {
+  if (count == 0) {
+    throw std::out_of_range("vector::front on empty vector");
+  }
+  return data_ptr[0];
+}
 
-template <typename T> T &vector<T>::back() { throw "unimplemented"; }
+template <typename T> T &vector<T>::back() {
+  if (count == 0) {
+    throw std::out_of_range("vector::back on empty vector");
+  }
+  return data_ptr[count - 1];
+}
 
-template <typename T> const T &vector<T>::back() const { throw "unimplemented"; }
+template <typename T> const T &vector<T>::back() const {
+  if (count == 0) {
+    throw std::out_of_range("vector::back on empty vector");
+  }
+  return data_ptr[count - 1];
+}
 
 template <typename T> std::size_t vector<T>::size() const { throw "unimplemented"; }
 
