@@ -13,10 +13,22 @@ list<T>::list() : head(nullptr), tail(nullptr), count(0) { throw "unimplemented"
 
 template <typename T>
 list<T>::list(std::initializer_list<T> values)
-    : head(nullptr), tail(nullptr), count(0) { throw "unimplemented"; }
-
+{
+  : head(nullptr), tail(nullptr), count(0) { throw "unimplemented"; }
+  for (const T &value : values) {
+    push_back(value);
+  }
+}
 template <typename T> list<T>::~list() { throw "unimplemented"; }
+{
+  node = *current = head;
 
+  while (current != nullptr) {
+    node nextnode = current->next;
+    delete current;
+    current = nextnode;
+  }
+}
 template <typename T> void list<T>::push_back(const T &value) { 
   Node* current = tail;
 
