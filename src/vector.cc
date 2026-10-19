@@ -34,7 +34,7 @@ template <typename T> vector<T>::~vector() {
 //im doing this one
 template <typename T> void vector<T>::push_back(const T &value) {
    if (count >= cap){
-     reallocate(cap*2);
+     reallocate(cap == 0 ? 1 : cap * 2);
    }
    
   data_ptr[count] = value;
@@ -43,15 +43,11 @@ template <typename T> void vector<T>::push_back(const T &value) {
 //im also doing this one.
 template <typename T> void vector<T>::push_front(const T &value) { 
   if (count >= cap){
-    reallocate(cap*2);
+    reallocate(cap == 0 ? 1 : cap * 2);
   } 
-  if (count = 0){
-    data_ptr[0] = value;
-  }
-  std::size_t i = count;
-  while( i > 0){
-    data_ptr[i] = data_ptr[i - 1];
-    i--;  
+
+  for (std::size_t i = count; i > 0; i--){
+    data_ptr[i] = data_ptr[i - 1]; 
   }
   data_ptr[0] = value;
   count++;
@@ -60,7 +56,7 @@ template <typename T> void vector<T>::push_front(const T &value) {
 template <typename T> void vector<T>::pop_back() {
     if (count == 0)
     {
-      std::out_of_range("This list does not exist");
+      throw std::out_of_range("pop_back on empty vector");
     }
     count--;
     
@@ -69,34 +65,27 @@ template <typename T> void vector<T>::pop_back() {
 //this one as well
 template <typename T> void vector<T>::pop_front() {
     if (count == 0){
-      std::out_of_range("This lsit does not exist");
+      throw std::out_of_range("pop_front on empty vector");
     }
-    if (count == 1){
-      count--;
-    }
-    std::size_t index = 0;
-    for(std::size_t i = index; i + 1 < count; i++ ){
+    for(std::size_t i = 0; i + 1 < count; i++ ){
       data_ptr[i] = data_ptr[i+1];
     }
-
+    count--;
  }
 //and this one
 template <typename T>
 void vector<T>::insert(std::size_t index, const T &value) {
-    if (size >= cap) {
-      resize(cap*2);
-    }
-    if (index < count && index >= 0){
-      for(std::size_t i = count; i > index; i--){
+  if (index > count) {
+    throw std::out_of_range("Index out of bounds");
+  }  
+  if (count >= cap) {
+      reallocate(cap == 0 ? 1 : cap * 2);
+  }
+  for(std::size_t i = count; i > index; i--) {
         data_ptr[i] = data_ptr[i-1];
-      }
-      data_ptr[index] = value; 
-    }
-    else {
-      throw std::out_of_range("Index out of bounds");
-    }
+  }
+    data_ptr[index] = value; 
     count++;
-
  }
 
 template <typename T> void vector<T>::clear() { 
@@ -104,15 +93,15 @@ template <typename T> void vector<T>::clear() {
  }
 
 template <typename T> T &vector<T>::at(std::size_t index) {
-  if(index < 0 || static_cast<std::size_t>(index) >= count){
-    throw std::out_of_range{"The item you have selected is out of range"};
+  if(index >= count){
+    throw std::out_of_range("index out of range");
   }
   return data_ptr[index];
  }
 
 template <typename T> const T &vector<T>::at(std::size_t index) const {
-   if(index < 0 || static_cast<std::size_t>(index) >= count){
-    throw std::out_of_range{"The item you have selected is out of range"};
+   if(index >= count){
+    throw std::out_of_range("index out of range");
   }
   return data_ptr[index];
  }
@@ -127,9 +116,9 @@ template <typename T> const T &vector<T>::operator[](std::size_t index) const {
 
 template <typename T> T &vector<T>::front() {
   if (count == 0) {
-    throw std::out_of_range("vector::back on empty vector");
+    throw std::out_of_range("vector::front on empty vector");
   }
-  return data_ptr[count - 1];
+  return data_ptr[0];
 }
 
 template <typename T> const T &vector<T>::front() const {
