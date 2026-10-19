@@ -153,7 +153,7 @@ template <typename T> const T &vector<T>::back() const {
   return data_ptr[count - 1];
 }
 
-template <typename T> std::size_t vector<T>::size() const { throw "unimplemented"; }
+template <typename T> std::size_t vector<T>::size() const { return count; }
 
 template <typename T> void vector<T>::sort_bubble() { throw "unimplemented"; }
 
