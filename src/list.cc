@@ -23,31 +23,31 @@ template <typename T> list<T>::~list() {
 
 template <typename T> void list<T>::push_back(const T &value) { 
   if (tail == nullptr){
-    head = tail = new Node(value, nullptr, nullptr);}
+    head = tail = new node(value, nullptr, nullptr);}
   else if (tail == head) {
-    head->next = tail = new Node(value, head, nullptr);}
+    head->next = tail = new node(value, head, nullptr);}
   else {
-    tail = tail->next = new Node(value, tail, nullptr);}
+    tail = tail->next = new node(value, tail, nullptr);}
   
   count++;
 }
 
 template <typename T> void list<T>::push_front(const T &value) { 
   if (head == nullptr) {
-    head = tail = new Node(value, nullptr, nullptr);}
+    head = tail = new node(value, nullptr, nullptr);}
   else if (head == tail){
-    tail->prev = head = new Node(value, nullptr, tail);}
+    tail->prev = head = new node(value, nullptr, tail);}
   else {
-    head = head->prev = new Node(value, nullptr, head);}
+    head = head->prev = new node(value, nullptr, head);}
   
   count++;
  }
 
 template <typename T> void list<T>::pop_back()     {
-  Node* current = tail;
+  node* current = tail;
 
   if (current == nullptr) {
-    return;}  
+    throw std::out_of_range("List is empty");}  
 
   count--;
   
@@ -67,10 +67,10 @@ template <typename T> void list<T>::pop_back()     {
 }
 
 template <typename T> void list<T>::pop_front() { 
-  Node* current = head;
+  node* current = head;
 
   if (current == nullptr) {
-    return;}
+    throw std::out_of_range("List is empty");}
     
   count--;
   
@@ -78,7 +78,7 @@ template <typename T> void list<T>::pop_front() {
     delete current;
     head = tail = nullptr;}
   else {
-    Node* temp = head;
+    node* temp = head;
     head = head->next;
     head->prev = nullptr;
     delete temp;}
@@ -86,7 +86,7 @@ template <typename T> void list<T>::pop_front() {
 
 template <typename T> void list<T>::insert(std::size_t index, const T &value) {
   int i = 0;
-  Node* current = head;
+  node* current = head;
 
   if (index == 0) {
     push_front(value);
@@ -101,20 +101,20 @@ template <typename T> void list<T>::insert(std::size_t index, const T &value) {
   if (current == tail){
     push_back(value);}
   else{
-    current->next = new Node(value, current, current->next);
+    current->next = new node(value, current, current->next);
     current->next->next->prev = current->next;
     count++;}
 }
 
 template <typename T> void list<T>::clear() {
-  Node* current = tail;
+  node* current = tail;
 
   if (current == nullptr){
     return;}
 
   while (current != head){
     node* temp = current;
-    current = current->next;
+    current = current->prev;
     delete temp;}
 
   head = tail = nullptr;  
@@ -123,7 +123,7 @@ template <typename T> void list<T>::clear() {
 
 template <typename T> T &list<T>::at(std::size_t index) { 
   int i = 0;
-  Node* current = head;
+  node* current = head;
 
   if (current == nullptr) {
       throw std::out_of_range("Index out of range");}
@@ -138,7 +138,7 @@ template <typename T> T &list<T>::at(std::size_t index) {
 
 template <typename T> const T &list<T>::at(std::size_t index) const { 
   int i = 0;
-  const Node* current = head;
+  const node* current = head;
 
   if (current == nullptr) {
       throw std::out_of_range("Index out of range");}
