@@ -228,7 +228,7 @@ void run_tests_for(const std::string &container_name) {
 
 int main() {
   std::cout << "=== Starting Comprehensive Test Harness ===" << std::endl;
- run_tests_for<list<int>>("list");
+  run_tests_for<list<int>>("list");
   run_tests_for<forward_list<int>>("forward_list");
   run_tests_for<vector<int>>("vector");
   std::cout << "=== All Tests Passed Successfully Across All Containers! ==="
