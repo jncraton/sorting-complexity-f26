@@ -191,8 +191,20 @@ template <typename T> std::size_t list<T>::size() const {
   return count;
 }
 
-template <typename T> void list<T>::sort_bubble() { throw "unimplemented"; }
-
+template <typename T> void list<T>::sort_bubble() {
+  if size() < 2 {
+    return;}
+  
+  node* current = head;
+  bool swap =  true;
+  while (swapped){
+    swap = false;
+    while (current != tail){
+      if (current > current->next->value){
+        std::swap(current, current->next);
+        swap = true;}
+      current = current->next;}}
+}
 template <typename T> void list<T>::sort_insertion() { throw "unimplemented"; }
 
 template <typename T> void list<T>::sort_selection() { throw "unimplemented"; }
