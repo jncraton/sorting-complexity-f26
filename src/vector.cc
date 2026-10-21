@@ -159,7 +159,15 @@ template <typename T> void vector<T>::sort_bubble() {
   }
 }
 
-template <typename T> void vector<T>::sort_insertion() { throw "unimplemented"; }
+
+template <typename T> void vector<T>::sort_insertion() {
+ for (std::size_t i = 1; i < count; i++) {
+  for (std::size_t j = i; j > 0 && data_ptr[j] < data_ptr[j - 1]; j--) {
+   std::swap(data_ptr[j], data_ptr[j - 1]);
+  }
+ }
+}
+
 
 template <typename T> void vector<T>::sort_selection() { throw "unimplemented"; }
 
