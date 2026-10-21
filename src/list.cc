@@ -200,12 +200,21 @@ template <typename T> void list<T>::sort_bubble() {
   while (swapped){
     swap = false;
     while (current != tail){
-      if (current > current->next->value){
-        std::swap(current, current->next);
+      if (current->value > current->next->value){
+        std::swap(current->value, current->next->value);
         swap = true;}
       current = current->next;}}
 }
-template <typename T> void list<T>::sort_insertion() { throw "unimplemented"; }
+template <typename T> void list<T>::sort_insertion() {
+  node* current = head;
+
+  for (int i = 1; i < size(); i++){
+    current = current->next;
+    node* position = current;
+    for (int j = i; j > 0 && position->value < position->prev->value; j--){
+      std::swap(position->value, position->prev->value);
+      position = position->prev;}}
+}
 
 template <typename T> void list<T>::sort_selection() { throw "unimplemented"; }
 
