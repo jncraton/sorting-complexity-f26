@@ -30,7 +30,8 @@ public:
   void pop_front();
   void insert(std::size_t index, const T &value);
   void clear();
-
+  
+  
   T &at(std::size_t index);
   const T &at(std::size_t index) const;
   T &operator[](std::size_t index);
