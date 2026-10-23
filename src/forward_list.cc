@@ -175,9 +175,51 @@ template <typename T> std::size_t forward_list<T>::size() const {
   return count;
 }
 
-template <typename T> void forward_list<T>::sort_bubble() { throw "unimplemented"; }
+template <typename T> void forward_list<T>::sort_bubble()
+{
+  bool swapped = true;
+  while (swapped) {
+    swapped = false;
+    auto current = head;
+    while (current != nullptr && current->next != nullptr) {
+      if (current->value > current->next->value) {
+        using std::swap;
+        swap(current->value, current->next->value);
+        swapped = true;
+      }
+      current = current->next;
+    }
+  }
+}
 
-template <typename T> void forward_list<T>::sort_insertion() { throw "unimplemented"; }
+template <typename T> void forward_list<T>::sort_insertion() {
+ node *sorted = nullptr;
+
+
+ while (head != nullptr) {
+   node *current = head;
+   head = head->next;
+
+
+   if (sorted == nullptr || current->value < sorted->value) {
+     current->next = sorted;
+     sorted = current;
+   } else {
+     node *position = sorted;
+     while (position->next != nullptr &&
+            !(current->value < position->next->value)) {
+       position = position->next;
+     }
+
+
+     current->next = position->next;
+     position->next = current;
+   }
+ }
+
+
+ head = sorted;
+}
 
 template <typename T> void forward_list<T>::sort_selection() { throw "unimplemented"; }
 
