@@ -144,9 +144,29 @@ template <typename T> const T &vector<T>::back() const {
 
 template <typename T> std::size_t vector<T>::size() const { return count; }
 
-template <typename T> void vector<T>::sort_bubble() { throw "unimplemented"; }
+template <typename T> void vector<T>::sort_bubble() {
+  for (std::size_t end = count; end > 1; end--) {
+    bool swapped = false;
+    for (std::size_t i = 0; i + 1 < end; i++) {
+      if (data_ptr[i] > data_ptr[i + 1]) {
+        std::swap(data_ptr[i], data_ptr[i + 1]);
+        swapped = true;
+      }
+    }
+    if (!swapped) {
+      break;
+    }
+  }
+}
 
-template <typename T> void vector<T>::sort_insertion() { throw "unimplemented"; }
+template <typename T> void vector<T>::sort_insertion() {
+ for (std::size_t i = 1; i < count; i++) {
+  for (std::size_t j = i; j > 0 && data_ptr[j] < data_ptr[j - 1]; j--) {
+   std::swap(data_ptr[j], data_ptr[j - 1]);
+  }
+ }
+}
+
 
 template <typename T> void vector<T>::sort_selection() { throw "unimplemented"; }
 
