@@ -171,6 +171,29 @@ void run_tests_for(const std::string &container_name) {
     }
     assert(exception_thrown);
   }
+
+    // bubble sort
+  {
+    Container l = {2, 5, 3, 1, 4};
+    l.sort_bubble();
+    assert(l[0] == 1);
+    assert(l[1] == 2);
+    assert(l[2] == 3);
+    assert(l[3] == 4);
+    assert(l[4] == 5);
+  }
+
+  // insertion sort
+  {
+    Container l = {2, 5, 3, 1, 4};
+    l.sort_insertion();
+    assert(l[0] == 1);
+    assert(l[1] == 2);
+    assert(l[2] == 3);
+    assert(l[3] == 4);
+    assert(l[4] == 5);
+  }
+
   // front and back accessors
   {
     Container l = {10, 20, 30};
@@ -223,27 +246,6 @@ void run_tests_for(const std::string &container_name) {
 
   std::cout << "=== All tests passed for " << container_name
             << " ===" << std::endl;
-  // bubble sort
-  {
-    Container l = {2, 5, 3, 1, 4};
-    l.sort_bubble();
-    assert(l[0] == 1);
-    assert(l[1] == 2);
-    assert(l[2] == 3);
-    assert(l[3] == 4);
-    assert(l[4] == 5);
-  }
-
-  // insertion sort
-  {
-    Container l = {2, 5, 3, 1, 4};
-    l.sort_insertion();
-    assert(l[0] == 1);
-    assert(l[1] == 2);
-    assert(l[2] == 3);
-    assert(l[3] == 4);
-    assert(l[4] == 5);
-  }
 
 int main() {
   std::cout << "=== Starting Comprehensive Test Harness ===" << std::endl;
