@@ -192,13 +192,13 @@ template <typename T> std::size_t list<T>::size() const {
 }
 
 template <typename T> void list<T>::sort_bubble() {
-  if size() < 2 {
+  if (size() < 2) {
     return;}
   
-  node* current = head;
   bool swap =  true;
-  while (swapped){
+  while (swap){
     swap = false;
+    node* current = head;
     while (current != tail){
       if (current->value > current->next->value){
         std::swap(current->value, current->next->value);
