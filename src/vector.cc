@@ -161,7 +161,21 @@ template <typename T> void vector<T>::sort_bubble() {
 
 template <typename T> void vector<T>::sort_insertion() { throw "unimplemented"; }
 
-template <typename T> void vector<T>::sort_selection() { throw "unimplemented"; }
+template <typename T> void vector<T>::sort_selection() {
+      
+        for(int i = 0; i < count-1; i++){
+          int largest = 0;
+          for(int j = 1; j < count - i; j++){
+
+           
+          if(data_ptr[j] > data_ptr[largest]){
+            largest = j;
+          }
+        }
+        std::swap(data_ptr[j], data_ptr[count - i - 1]);
+      }
+
+ }
 
 template <typename T> void vector<T>::sort_merge() { throw "unimplemented"; }
 template <typename T> void vector<T>::sort_quick() { throw "unimplemented"; }

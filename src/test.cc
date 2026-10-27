@@ -221,17 +221,125 @@ void run_tests_for(const std::string &container_name) {
     }
     assert(exception_thrown);
   }
+  //general sort test
+
+ {
+
+Container l = {40,60,30,20,70,50,80,100,10,90};
+//Container cl =
+for(int i = 0; i < 10; i++){
+     std::cout << l.at(i)<< std::endl;
+}
+ l.sort_bubble();
+for(int i = 0; i < 10; i++){
+     std::cout << l.at(i) << std::endl;
+}
+
+    for(int i = 0; i < 10; i++){
+      if(l.at(i) != (i+1)*10){
+     //  throw std::out_of_range("list is not ordered");
+         std::cout << "This List is not sorted" << std::endl;
+      }
+    std::cout << "==The list is sorted==" << std::endl;
+    }
+
+
+  }
+
+
 
   std::cout << "=== All tests passed for " << container_name
             << " ===" << std::endl;
 }
 
+
+
+
+//this code is what is actually checking if the list is sorted by seeing if the previous value is less than the next
+template <typename Container>
+bool is_sorted(const Container& c) {
+    for (size_t i = 1; i < c.size(); i++) {
+        if (c.at(i-1) > c.at(i)) {
+            return false;
+        }
+    }
+    return true;
+}
+//this method allows us to pass in any sorting method and use our previously created is_sorted  method
+template <typename Container>
+//passing in the name  of teh sort forclarity and then the actual method itself
+void run_sort_test(const std::string& sort_name,
+                   void (Container::*sort_method)()) 
+{
+    Container l = {40,60,30,20,70,50,80,100,10,90};
+
+    // Call the sorting method passed in
+    (l.*sort_method)();
+
+    // Validate and print the list if its incorrect
+    if (!is_sorted(l)) {
+        std::cout << sort_name << " FAILED\n";
+        for (size_t i = 0; i < l.size(); i++) {
+            std::cout << l.at(i) << " ";
+        }
+        std::cout << "\n";
+        assert(false && "Sort method failed");
+    }
+
+    std::cout << sort_name << " passed\n";
+}
+//this final method i made myself and it just makes int main smaller
+
+template <typename Container>
+void run_sorting_test(const std::string &container_name){
+   if(container_name == "vector"){
+       run_sort_test<vector<int>>("bubble sort", &vector<int>::sort_bubble);
+       //run_sort_test<vector<int>>("insertion sort", &vector<int>::sort_insertion);
+       run_sort_test<vector<int>>("selection sort", &vector<int>::sort_selection);
+       //run_sort_test<vector<int>>("merge sort", &vector<int>::sort_merge);
+       //run_sort_test<vector<int>>("quick sort", &vector<int>::sort_quick);
+       //run_sort_test<vector<int>>("heap sort", &vector<int>::sort_heap);
+       //run_sort_test<vector<int>>("shell sort", &vector<int>::sort_shell);
+       //run_sort_test<vector<int>>("tim sort", &vector<int>::sort_tim);
+
+   }
+   else if(container_name == "list"){ 
+       run_sort_test<list<int>>("bubble sort", &list<int>::sort_bubble);
+       //run_sort_test<list<int>>("insertion sort", &list<int>::sort_insertion);
+       //run_sort_test<list<int>>("selection sort", &list<int>::sort_selection);
+       //run_sort_test<list<int>>("merge sort", &list<int>::sort_merge);
+       //run_sort_test<list<int>>("quick sort", &list<int>::sort_quick);
+       //run_sort_test<list<int>>("heap sort", &list<int>::sort_heap);
+       //run_sort_test<list<int>>("shell sort", &list<int>::sort_shell);
+       //run_sort_test<list<int>>("tim sort", &list<int>::sort_tim);
+
+   }
+   else if(container_name == "forward_list"){ 
+       run_sort_test<forward_list<int>>("bubble sort", &forward_list<int>::sort_bubble);
+       //run_sort_test<forward_list<int>>("insertion sort", &forward_list<int>::sort_insertion);
+       //run_sort_test<forward_list<int>>("selection sort", &forward_list<int>::sort_selection);
+       //run_sort_test<forward_list<int>>("merge sort", &forward_list<int>::sort_merge);
+       //run_sort_test<forward_list<int>>("quick sort", &forward_list<int>::sort_quick);
+       //run_sort_test<forward_list<int>>("heap sort", &forward_list<int>::sort_heap);
+       //run_sort_test<forward_list<int>>("shell sort", &forward_list<int>::sort_shell);
+      // run_sort_test<forward_list<int>>("tim sort", &forward_list<int>::sort_tim);
+
+   }
+
+}
+
+
+
 int main() {
   std::cout << "=== Starting Comprehensive Test Harness ===" << std::endl;
-  run_tests_for<list<int>>("list");
-  run_tests_for<forward_list<int>>("forward_list");
+  //run_tests_for<list<int>>("list");
+  //run_tests_for<forward_list<int>>("forward_list");
   run_tests_for<vector<int>>("vector");
+  run_sorting_test<vector<int>>("vector");
+  //run_sorting_test<list<int>>("list");
+  //run_sorting_test<forward_list<int>>("forward_list");
   std::cout << "=== All Tests Passed Successfully Across All Containers! ==="
             << std::endl;
   return 0;
 }
+
