@@ -179,7 +179,7 @@ template <typename T> void vector<T>::sort_selection() {
             largest = j;
           }
         }
-        std::swap(data_ptr[j], data_ptr[count - i - 1]);
+        std::swap(data_ptr[largest], data_ptr[count - i - 1]);
       }
 
  }
