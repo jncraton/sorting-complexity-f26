@@ -169,19 +169,15 @@ template <typename T> void vector<T>::sort_insertion() {
 
 
 template <typename T> void vector<T>::sort_selection() {
-      
-        for(int i = 0; i < count-1; i++){
-          int largest = 0;
-          for(int j = 1; j < count - i; j++){
-
-           
-          if(data_ptr[j] > data_ptr[largest]){
-            largest = j;
+        for(std::size_t i = 0; i < count-1; i++) {
+          std::size_t largest = 0;
+          for(std::size_t j = 1; j < count - i; j++ ) {
+            if(data_ptr[j] > data_ptr[largest]) {
+              largest = j;
           }
         }
         std::swap(data_ptr[largest], data_ptr[count - i - 1]);
       }
-
  }
 
 template <typename T> void vector<T>::sort_merge() { throw "unimplemented"; }
