@@ -1,6 +1,7 @@
 #include "forward_list.hh"
 
 #include <stdexcept>
+#include <utility>
 
 #include "trackedint.hh"
 
@@ -221,7 +222,22 @@ template <typename T> void forward_list<T>::sort_insertion() {
  head = sorted;
 }
 
-template <typename T> void forward_list<T>::sort_selection() { throw "unimplemented"; }
+template <typename T> void forward_list<T>::sort_selection() {
+  for (node *current = head; current != nullptr; current = current->next) {
+    node *minimum = current;
+    for (node *candidate = current->next; candidate != nullptr;
+         candidate = candidate->next) {
+      if (candidate->value < minimum->value) {
+        minimum = candidate;
+      }
+    }
+
+    if (minimum != current) {
+      using std::swap;
+      swap(current->value, minimum->value);
+    }
+  }
+}
 
 template <typename T> void forward_list<T>::sort_merge() { throw "unimplemented"; }
 template <typename T> void forward_list<T>::sort_quick() { throw "unimplemented"; }
