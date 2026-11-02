@@ -6,52 +6,53 @@
 
 template <typename T>
 list<T>::node::node(const T &value, node *prev, node *next)
-    : value(value), prev(prev), next(next) {}
+    : value(value), previous(prev), next(next) { throw "unimplemented"; }
 
 template <typename T>
-list<T>::list() : head(nullptr), tail(nullptr), count(0) {}
+list<T>::list() : head(nullptr), tail(nullptr), count(0) { throw "unimplemented"; }
 
 template <typename T>
 list<T>::list(std::initializer_list<T> values)
-    : head(nullptr), tail(nullptr), count(0) {
-      for (const T& value : values){
-        push_back(value);}
-    }
+{
+  : head(nullptr), tail(nullptr), count(0) { throw "unimplemented"; }
+  for (const T &value : values) {
+    push_back(value);
+  }
+}
+template <typename T> list<T>::~list() { throw "unimplemented"; }
+{
+  node = *current = head;
 
-template <typename T> list<T>::~list() {
-  clear();}
-
+  while (current != nullptr) {
+    node nextnode = current->next;
+    delete current;
+    current = nextnode;
+  }
+}
 template <typename T> void list<T>::push_back(const T &value) { 
-  if (tail == nullptr){
-    head = tail = new node(value, nullptr, nullptr);}
-  else if (tail == head) {
-    head->next = tail = new node(value, head, nullptr);}
+  Node* current = tail;
+
+  if (current == nullptr){
+    head = tail = new Node(value, nullptr, nullptr);}
+  else if (current == head) {
+    head->next = tail = new Node(value, head, nullptr);}
   else {
-    tail = tail->next = new node(value, tail, nullptr);}
-  
-  count++;
+    current->next = tail = new Node(value, current, nullptr);}
 }
 
 template <typename T> void list<T>::push_front(const T &value) { 
   if (head == nullptr) {
-    head = tail = new node(value, nullptr, nullptr);}
-  else if (head == tail){
-    tail->prev = head = new node(value, nullptr, tail);}
+    head = tail = new Node(value, nullptr, nullptr);}
   else {
-    head = head->prev = new node(value, nullptr, head);}
-  
-  count++;
+    head = new Node(value, nullptr, head);
+    head->next->prev = head;}
  }
 
 template <typename T> void list<T>::pop_back()     {
-  node* current = tail;
-
+  Node* current = tail;
   if (current == nullptr) {
-    throw std::out_of_range("List is empty");}  
-
-  count--;
-  
-  if (current->prev == nullptr) {
+    return;}
+  else if (current->prev == nullptr) {
     delete current;
     head = tail = nullptr;
     return;}
@@ -60,25 +61,24 @@ template <typename T> void list<T>::pop_back()     {
     tail = head;
     head->next = nullptr;
     return;}
-  else {
-    tail = current->prev;
-    delete current;
-    tail->next = nullptr;}
+
+  tail = current->prev;
+  delete current;
+  tail->next = nullptr;
 }
 
 template <typename T> void list<T>::pop_front() { 
-  node* current = head;
+  Node* current = head;
 
   if (current == nullptr) {
-    throw std::out_of_range("List is empty");}
-    
-  count--;
-  
-  if (current == tail) {
-    delete current;
+    return;}
+  else if (current == tail){
+    delete head;
+    delete tail;
     head = tail = nullptr;}
   else {
-    node* temp = head;
+    Node* temp;
+    temp = head;
     head = head->next;
     head->prev = nullptr;
     delete temp;}
@@ -86,44 +86,47 @@ template <typename T> void list<T>::pop_front() {
 
 template <typename T> void list<T>::insert(std::size_t index, const T &value) {
   int i = 0;
-  node* current = head;
+  Node* current = head;
 
-  if (index == 0) {
-    push_front(value);
-    return;}
+ if (index == 0) {
+    if (head == nullptr) {
+      head = tail = new Node(value, nullptr, nullptr);
+      return;}
+    else {
+      head = new Node(value, head, nullptr);
+      head->next->prev = head;}
+      return;}
 
   while (i < index - 1 && current != nullptr) {
     current = current->next;
     i++;}
-
   if (current == nullptr) {
       throw std::out_of_range("Index out of range");}
   if (current == tail){
-    push_back(value);}
+    current->next = tail = new Node(value, tail, nullptr);}
   else{
-    current->next = new node(value, current, current->next);
+    current->next = new Node(value, current, current->next);
     current->next->next->prev = current->next;
-    count++;}
+    return;}
 }
 
 template <typename T> void list<T>::clear() {
-  node* current = tail;
+  Node* current = tail;
 
   if (current == nullptr){
     return;}
 
   while (current != head){
-    node* temp = current;
     current = current->prev;
-    delete temp;}
+    delete current->next;}
 
-  head = tail = nullptr;  
-  count = 0;
+  delete head;
+  head = tail = nullptr;
 }
 
 template <typename T> T &list<T>::at(std::size_t index) { 
   int i = 0;
-  node* current = head;
+  Node* current = head;
 
   if (current == nullptr) {
       throw std::out_of_range("Index out of range");}
@@ -133,12 +136,12 @@ template <typename T> T &list<T>::at(std::size_t index) {
       current = current->next;
       i++;}
     
-  return current->value;
+  return current->data;
 }
 
 template <typename T> const T &list<T>::at(std::size_t index) const { 
   int i = 0;
-  const node* current = head;
+  const Node* current = head;
 
   if (current == nullptr) {
       throw std::out_of_range("Index out of range");}
@@ -148,7 +151,7 @@ template <typename T> const T &list<T>::at(std::size_t index) const {
       current = current->next;
       i++;}
     
-  return current->value;
+  return current->data;
 }
 
 template <typename T> T &list<T>::operator[](std::size_t index) {
@@ -188,33 +191,19 @@ template <typename T> const T &list<T>::back() const {
 }
 
 template <typename T> std::size_t list<T>::size() const {
-  return count;
-}
+  int size = 0;
+  const Node* current = head;
 
-template <typename T> void list<T>::sort_bubble() {
-  if (size() < 2) {
-    return;}
+  while (current != nullptr){
+    size += 1;
+    current = current->next;}
   
-  bool swap =  true;
-  while (swap){
-    swap = false;
-    node* current = head;
-    while (current != tail){
-      if (current->value > current->next->value){
-        std::swap(current->value, current->next->value);
-        swap = true;}
-      current = current->next;}}
+  return size;
 }
-template <typename T> void list<T>::sort_insertion() {
-  node* current = head;
 
-  for (int i = 1; i < size(); i++){
-    current = current->next;
-    node* position = current;
-    for (int j = i; j > 0 && position->value < position->prev->value; j--){
-      std::swap(position->value, position->prev->value);
-      position = position->prev;}}
-}
+template <typename T> void list<T>::sort_bubble() { throw "unimplemented"; }
+
+template <typename T> void list<T>::sort_insertion() { throw "unimplemented"; }
 
 template <typename T> void list<T>::sort_selection() {
   for (int i = 0; i < size() - 1; i++) {

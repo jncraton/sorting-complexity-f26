@@ -6,10 +6,10 @@
 template <typename T> class list {
   struct node {
     T value;
-    node *prev;
+    node *previous;
     node *next;
 
-    node(const T &value, node *prev = nullptr, node *next = nullptr);
+    node(const T &value, node *previous = nullptr, node *next = nullptr);
   };
 
   node *head;
