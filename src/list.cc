@@ -216,7 +216,16 @@ template <typename T> void list<T>::sort_insertion() {
       position = position->prev;}}
 }
 
-template <typename T> void list<T>::sort_selection() { throw "unimplemented"; }
+template <typename T> void list<T>::sort_selection() {
+  for (int i = 0; i < size() - 1; i++) {
+    node* current = head;
+    node* bigindex = head;
+    for (int j = 1; j < size() - i; j++) {
+      current = current->next;
+      if (current->value > bigindex->value){
+        bigindex = current;}}
+      std::swap(current->value, bigindex->value);}
+}
 
 template <typename T> void list<T>::sort_merge() { throw "unimplemented"; }
 
