@@ -167,7 +167,6 @@ template <typename T> void vector<T>::sort_insertion() {
  }
 }
 
-
 template <typename T> void vector<T>::sort_selection() {
         for(std::size_t i = 0; i < count-1; i++) {
           std::size_t largest = 0;
@@ -180,11 +179,11 @@ template <typename T> void vector<T>::sort_selection() {
       }
  }
 
-template <typename T> void vector<T>::sort_merge() { throw "unimplemented"; }
-template <typename T> void vector<T>::sort_quick() { throw "unimplemented"; }
-template <typename T> void vector<T>::sort_heap() { throw "unimplemented"; }
-template <typename T> void vector<T>::sort_shell() { throw "unimplemented"; }
-template <typename T> void vector<T>::sort_tim() { throw "unimplemented"; }
+// template <typename T> void vector<T>::sort_merge() { throw "unimplemented"; }
+// template <typename T> void vector<T>::sort_quick() { throw "unimplemented"; }
+// template <typename T> void vector<T>::sort_heap() { throw "unimplemented"; }
+// template <typename T> void vector<T>::sort_shell() { throw "unimplemented"; }
+// template <typename T> void vector<T>::sort_tim() { throw "unimplemented"; }
 
 template class vector<TrackedInt>;
 template class vector<int>;
