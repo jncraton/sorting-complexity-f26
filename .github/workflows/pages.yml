@@ -26,7 +26,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
       - name: Build Dashboard
-        run: make
+        run: make index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:

@@ -127,6 +127,7 @@ void run_sort_benchmarks(std::ofstream &output, const char *container_name,
                          InputOrder input_order) {
   const std::size_t sort_iterations = iterations / 10;
 
+  /*
   benchmark<Container>(
       output, container_name, "sort_bubble", size, size, sort_iterations,
       [](auto &l, std::size_t) { l.sort_bubble(); }, input_order);
@@ -158,6 +159,7 @@ void run_sort_benchmarks(std::ofstream &output, const char *container_name,
   benchmark<Container>(
       output, container_name, "sort_tim", size, size, sort_iterations,
       [](auto &l, std::size_t) { l.sort_tim(); }, input_order);
+  */
 }
 
 template <typename Container>
