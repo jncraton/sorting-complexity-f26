@@ -168,7 +168,7 @@ template <typename T> void vector<T>::sort_insertion() {
 }
 
 template <typename T> void vector<T>::sort_selection() {
-        for(std::size_t i = 0; i < count-1; i++) {
+        for (std::size_t i = 0; i + 1 < count; i++) {
           std::size_t largest = 0;
           for(std::size_t j = 1; j < count - i; j++ ) {
             if(data_ptr[j] > data_ptr[largest]) {
@@ -179,7 +179,19 @@ template <typename T> void vector<T>::sort_selection() {
       }
  }
 
-// template <typename T> void vector<T>::sort_merge() { throw "unimplemented"; }
+template <typename T> void vector<T>::sort_merge() {
+  for (std::size_t width = 1; width < count; width *= 2) {
+    for (std::size_t left = 0; left < count;) {
+      std::size_t mid = left + std::min(width, count - left);
+      std::size_t right = mid + std::min(width, count - mid);
+
+      std::inplace_merge(data_ptr + left, data_ptr + mid, data_ptr + right);
+      left = right;
+    }
+  }
+}
+
+
 // template <typename T> void vector<T>::sort_quick() { throw "unimplemented"; }
 // template <typename T> void vector<T>::sort_heap() { throw "unimplemented"; }
 // template <typename T> void vector<T>::sort_shell() { throw "unimplemented"; }
