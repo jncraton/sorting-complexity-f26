@@ -112,7 +112,7 @@ template <typename T> void list<T>::clear() {
   if (current == nullptr){
     return;}
 
-  while (current != head){
+  while (current != nullptr){
     node* temp = current;
     current = current->prev;
     delete temp;}
@@ -227,7 +227,100 @@ template <typename T> void list<T>::sort_selection() {
       std::swap(current->value, bigindex->value);}
 }
 
-template <typename T> void list<T>::sort_merge() { throw "unimplemented"; }
+template <typename T> void list<T>::sort_merge() { 
+  if (size() <= 1){
+    return;}
+
+  list<T> left;
+  list<T> right;
+
+  node* current = head;
+  int midpoint = size() / 2;
+
+  left.head = new node (current->value, nullptr, nullptr);
+  left.tail = left.head;
+  left.count++;
+
+  for (int i = 0; i < midpoint - 1; i++){
+    current = current->next;
+
+    node* new_node = new node (current->value, left.tail, nullptr);
+    left.tail->next = new_node;
+    left.tail = new_node;
+
+    left.count++;}
+
+
+  current = current->next;
+  right.head = new node(current->value, nullptr, nullptr);
+  right.tail = right.head;
+  right.count++;
+
+  while (current->next != nullptr) {
+    current = current->next;
+
+    node* new_node = new node(current->value, right.tail, nullptr);
+    right.tail->next = new_node;
+    right.tail = new_node;
+
+    right.count++;}
+
+
+  left.sort_merge();
+  right.sort_merge();
+
+  node* left_current = left.head;
+  node* right_current = right.head;
+
+  clear();
+  T smaller;
+
+  while (left_current != nullptr && right_current != nullptr){
+    if (left_current->value > right_current->value){
+      smaller = right_current->value;
+      right_current = right_current->next;}
+    else {
+      smaller = left_current->value;
+      left_current = left_current->next;}
+
+    node* new_node = new node(smaller, tail, nullptr);
+
+    if (head == nullptr) {
+        head = new_node;}
+    else {
+      tail->next = new_node;}
+    tail = new_node;
+    count++;}
+
+  // Copy remaining left nodes
+while (left_current != nullptr) {
+  node* new_node = new node(left_current->value, tail, nullptr);
+
+  if (head == nullptr) {
+    head = new_node;}
+  else {
+    tail->next = new_node;}
+
+  tail = new_node;
+  count++;
+  left_current = left_current->next;}
+
+// Copy remaining right nodes
+while (right_current != nullptr) {
+  node* new_node = new node(right_current->value, tail, nullptr);
+
+  if (head == nullptr) {
+    head = new_node;}
+  else {
+    tail->next = new_node;}
+
+  tail = new_node;
+  count++;
+  right_current = right_current->next;}
+
+left.clear();
+right.clear();
+}
 
 template <typename T> void list<T>::sort_quick() { throw "unimplemented"; }
 
