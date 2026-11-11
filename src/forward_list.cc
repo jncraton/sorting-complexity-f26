@@ -237,7 +237,41 @@ template <typename T> void forward_list<T>::sort_selection() {
   }
 }
 
-template <typename T> void forward_list<T>::sort_merge() { throw "unimplemented"; }
+template <typename T> void forward_list<T>::sort_merge() {
+  auto merge = [](node *left, node *right) {
+    node *merged_head = nullptr;
+    node **next = &merged_head;
+    while (left != nullptr && right != nullptr) {
+      node *&thing = right->value < left->value ? right : left;
+      *next = thing;
+      thing = thing->next;
+      next = &((*next)->next);
+    }
+
+    *next = left != nullptr ? left : right;
+    return merged_head;
+  };
+  auto sort = [&](auto &&self, node *first) -> node * {
+    if (first == nullptr || first->next == nullptr) {
+      return first;
+    }
+
+    node *slow = first;
+    node *fast = first->next;
+    while (fast != nullptr && fast->next != nullptr) {
+      slow = slow->next;
+      fast = fast->next->next;
+    }
+
+    node *right = slow->next;
+    slow->next = nullptr;
+    node *left_sorted = self(self, first);
+    node *right_sorted = self(self, right);
+    return merge(left_sorted, right_sorted);
+  };
+
+  head = sort(sort, head);
+}
 template <typename T> void forward_list<T>::sort_quick() { throw "unimplemented"; }
 template <typename T> void forward_list<T>::sort_heap() { throw "unimplemented"; }
 template <typename T> void forward_list<T>::sort_shell() { throw "unimplemented"; }
