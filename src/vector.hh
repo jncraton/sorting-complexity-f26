@@ -41,6 +41,7 @@ public:
   void sort_insertion();
   void sort_selection();
   void sort_merge();
+  void quicksort_recursive(int a, int b);
   void sort_quick();
   void sort_heap();
   void sort_shell();

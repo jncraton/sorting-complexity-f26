@@ -191,8 +191,42 @@ template <typename T> void vector<T>::sort_merge() {
   }
 }
 
+template <typename T> void vector<T>::quicksort_recursive(int first, int last) { 
+    if (first >= last) {
+      return;
+    }
+    T pivot = data_ptr[first + (last - first) / 2];
 
-// template <typename T> void vector<T>::sort_quick() { throw "unimplemented"; }
+    int i = first;
+    int j = last;
+
+    while (i <= j) {
+      while (data_ptr[i] < pivot) {
+        i++;
+      }
+      while (data_ptr[j] > pivot) {
+        j--;
+      }
+      if (i <=j) {
+        std::swap(data_ptr[i],data_ptr[j]);
+        i++;
+        j--;
+      }
+    }
+
+    quicksort_recursive(first, j);
+    quicksort_recursive(i, last);
+ }
+
+
+ template <typename T> void vector<T>::sort_quick() {
+    if (count == 0) {
+      return;
+    }
+
+    quicksort_recursive(0, static_cast<int>(count) -1);
+ }
+
 // template <typename T> void vector<T>::sort_heap() { throw "unimplemented"; }
 // template <typename T> void vector<T>::sort_shell() { throw "unimplemented"; }
 // template <typename T> void vector<T>::sort_tim() { throw "unimplemented"; }
