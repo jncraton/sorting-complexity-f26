@@ -322,7 +322,46 @@ left.clear();
 right.clear();
 }
 
-template <typename T> void list<T>::sort_quick() { throw "unimplemented"; }
+template <typename T> void list<T>::sort_quick() {
+  if (head == nullptr || head == tail )
+    return;
+
+  auto quicksort = [&](auto&& self, node* first, node* last) -> void {
+
+    if (first == nullptr || last == nullptr || first == last)
+    return;
+
+    node* pivot = first;
+    node* smaller = nullptr;
+    node* current = first->next;
+
+    while (current != nullptr && current != last->next) {
+      if (current->value < pivot->value){
+        if (smaller == nullptr) {
+          smaller = first->next;
+        }
+      else{
+        smaller = smaller->next;
+      }
+        std::swap(smaller->value,current->value);
+      }
+      current = current->next;
+    }
+    node* pivot_position;
+    if (smaller == nullptr) {
+      pivot_position = first;
+    }
+    else {
+      pivot_position = smaller;
+      std::swap(pivot->value, smaller->value);
+    }
+    if (pivot_position != first)
+      self(self, first, pivot_position->prev);
+    if (pivot_position != last)
+      self(self, pivot_position->next, last);
+  };
+  quicksort(quicksort, head, tail);
+}
 
 template <typename T> void list<T>::sort_heap() { throw "unimplemented"; }
 
