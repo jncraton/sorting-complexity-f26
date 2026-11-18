@@ -1,14 +1,7 @@
-# /// script
-# requires-python = ">=3.9"
-# dependencies = [
-#   "plotly",
-# ]
-# ///
 
 import csv
 from collections import defaultdict
 from pathlib import Path
-from tempfile import TemporaryDirectory
 
 import plotly.graph_objects as go
 
@@ -32,6 +25,7 @@ def load_results(filename):
         "iterations",
         "ns_per_operation",
     }
+
     if not rows or not required.issubset(rows[0]):
         raise ValueError("CSV must contain the required benchmark columns")
 
@@ -45,13 +39,25 @@ def load_results(filename):
 
 
 def build_chart(rows):
-    """Create an interactive Plotly chart from benchmark rows."""
+    """Create an interactive sorting comparison dashboard."""
+
     groups = defaultdict(list)
+
     for row in rows:
-        groups[(row["operation"], row["input_order"], row["container"])].append(row)
+        key = (
+            row["operation"],
+            row["input_order"],
+            row["container"],
+        )
+        groups[key].append(row)
 
     containers = sorted({row["container"] for row in rows})
-    combinations = {(row["operation"], row["input_order"]) for row in rows}
+
+    combinations = {
+        (row["operation"], row["input_order"])
+        for row in rows
+    }
+
     combinations = sorted(
         combinations,
         key=lambda item: (
@@ -62,19 +68,27 @@ def build_chart(rows):
     )
 
     fig = go.Figure()
+
     combination_traces = defaultdict(list)
 
     for operation, input_order in combinations:
+
         for container in containers:
+
             points = sorted(
                 groups.get((operation, input_order, container), []),
                 key=lambda row: row["size"],
             )
+
             if not points:
                 continue
 
             trace_index = len(fig.data)
-            combination_traces[(operation, input_order)].append(trace_index)
+
+            combination_traces[(operation, input_order)].append(
+                trace_index
+            )
+
             fig.add_trace(
                 go.Scatter(
                     x=[row["size"] for row in points],
@@ -84,12 +98,19 @@ def build_chart(rows):
                     legendgroup=container,
                     visible=(operation, input_order) == combinations[0],
                     customdata=[
-                        [row["iterations"], row["input_order"]] for row in points
+                        [
+                            row["iterations"],
+                            row["input_order"],
+                            row["operation"],
+                            row["container"],
+                        ]
+                        for row in points
                     ],
                     hovertemplate=(
-                        "Container: %{fullData.name}<br>"
-                        "Size: %{x}<br>"
-                        "ns/operation: %{y}<br>"
+                        "<b>%{customdata[3]}</b><br>"
+                        "Algorithm: %{customdata[2]}<br>"
+                        "Input size: %{x}<br>"
+                        "Nanoseconds/operation: %{y}<br>"
                         "Iterations: %{customdata[0]}<br>"
                         "Input order: %{customdata[1]}"
                         "<extra></extra>"
@@ -98,8 +119,11 @@ def build_chart(rows):
             )
 
     buttons = []
+
     for operation, input_order in combinations:
+
         visible = [False] * len(fig.data)
+
         for index in combination_traces[(operation, input_order)]:
             visible[index] = True
 
@@ -112,7 +136,7 @@ def build_chart(rows):
                     {
                         "title": (
                             f"{operation} ({input_order}): "
-                            "benchmark time by input size"
+                            "Sorting Performance Comparison"
                         )
                     },
                 ],
@@ -120,15 +144,19 @@ def build_chart(rows):
         )
 
     first_operation, first_input_order = combinations[0]
+
     fig.update_layout(
         title=(
-            f"{first_operation} ({first_input_order}): " "benchmark time by input size"
+            f"{first_operation} ({first_input_order}): "
+            "Sorting Performance Comparison"
         ),
-        xaxis_title="Input size",
-        yaxis_title="Nanoseconds per operation",
+        xaxis_title="Input Size",
+        yaxis_title="Nanoseconds per Operation",
         xaxis_type="log",
         yaxis_type="log",
         template="plotly_white",
+        hovermode="x unified",
+        legend_title="Container",
         updatemenus=[
             {
                 "buttons": buttons,
@@ -140,7 +168,7 @@ def build_chart(rows):
                 "yanchor": "top",
             }
         ],
-        margin={"t": 110},
+        margin={"t": 120},
     )
 
     return fig
@@ -148,12 +176,15 @@ def build_chart(rows):
 
 def main():
     rows = load_results("bench.csv")
+
     fig = build_chart(rows)
+
     fig.write_html(
         "index.html",
         full_html=True,
         include_plotlyjs=True,
     )
+
     print(f"Wrote {Path('index.html').resolve()}")
 
 
