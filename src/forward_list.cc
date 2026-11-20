@@ -272,7 +272,44 @@ template <typename T> void forward_list<T>::sort_merge() {
 
   head = sort(sort, head);
 }
-template <typename T> void forward_list<T>::sort_quick() { throw "unimplemented"; }
+template <typename T> void forward_list<T>::sort_quick() {
+ auto sort = [&](auto &&self, node *first, node *after_last) -> void {
+   if (first == after_last || first->next == after_last) {
+     return;
+   }
+
+   node *middle = first;
+   node *fast = first;
+   while (fast != after_last && fast->next != after_last) {
+     middle = middle->next;
+     fast = fast->next->next;
+   }
+
+
+   using std::swap;
+   swap(first->value, middle->value);
+   T pivot = first->value;
+
+
+   node *partition = first;
+   for (node *current = first->next; current != after_last;
+        current = current->next) {
+     if (current->value < pivot) {
+       partition = partition->next;
+       swap(partition->value, current->value);
+     }
+   }
+   swap(first->value, partition->value);
+
+
+   self(self, first, partition);
+   self(self, partition->next, after_last);
+ };
+
+
+ sort(sort, head, nullptr);
+}
+
 template <typename T> void forward_list<T>::sort_heap() { throw "unimplemented"; }
 template <typename T> void forward_list<T>::sort_shell() { throw "unimplemented"; }
 template <typename T> void forward_list<T>::sort_tim() { throw "unimplemented"; }
